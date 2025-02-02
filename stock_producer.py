@@ -35,7 +35,7 @@ class StockDataProducer:
             self.logger.error(f"Error fetching data for {symbol}: {str(e)}")
             return None
 
-    def produce_messages(self, symbols, interval):
+    def produce_messages(self, symbols, interval=60):
         while True:
             for symbol in symbols:
                 data = self.get_stock_data(symbol)
@@ -46,3 +46,5 @@ class StockDataProducer:
                     except Exception as e:
                         self.logger.error(f"Error producing message: {str(e)}")
             time.sleep(interval)
+
+
