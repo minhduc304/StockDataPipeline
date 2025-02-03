@@ -23,7 +23,7 @@ class TimeScaleDBConnector:
             self.conn = psycopg2.connect(**self.conn_params)
             with self.conn.cursor() as cur:
                 cur.execute("""
-                    CREATE TABLE stock_data (
+                    CREATE TABLE IF NOT EXISTS stock_data (
                         time TIMESTAMPTZ NOT NULL,
                         symbol TEXT NOT NULL,
                         price DOUBLE PRECISION,

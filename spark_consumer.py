@@ -3,7 +3,7 @@ from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, TimestampType
 from typing import Optional, Dict, List
 from datetime import datetime
-from timescaleDB import TimeScaleDBConnector
+from timescale_connector import TimeScaleDBConnector
 
 class SparkConsumer :
     def __init__(self, app_name: str = "StockMarketPipeline"):
@@ -80,34 +80,34 @@ class SparkConsumer :
         if not self.spark:
             self.create_spark_session()
 
-        try:
-            # Create streaming DataFrame from Kafka source
-            df = self.spark.readStream \
-                .format("kafka") \
-                .option("kafka.bootstrap.servers", kafka_bootstrap_servers) \
-                .option("subscribe", topic) \
-                .load()
+        # try:
+        # Create streaming DataFrame from Kafka source
+        df = self.spark.readStream \
+            .format("kafka") \
+            .option("kafka.bootstrap.servers", kafka_bootstrap_servers) \
+            .option("subscribe", topic) \
+            .load()
 
-            # Parse JSON data from Kafka messages
-            parsed_df = df.select(
-                from_json(col("value").cast("string"), self.schema).alias("data")
-            ).select("data.*")
+        # Parse JSON data from Kafka messages
+        parsed_df = df.select(
+            from_json(col("value").cast("string"), self.schema).alias("data")
+        ).select("data.*")
 
-            # Convert timestamp to proper format
-            processed_df = parsed_df \
-                .withColumn("timestamp", col("timestamp").cast(TimestampType()))
+        # Convert timestamp to proper format
+        processed_df = parsed_df \
+            .withColumn("timestamp", col("timestamp").cast(TimestampType()))
 
-            # Start streaming query to write data to TimescaleDB
-            query = processed_df.writeStream \
-                .foreachBatch(self.write_to_timescaledb) \
-                .outputMode("append") \
-                .start()
-            
-            return query
+        # Start streaming query to write data to TimescaleDB
+        query = processed_df.writeStream \
+            .foreachBatch(self.write_to_timescaledb) \
+            .outputMode("append") \
+            .start()
         
-        except Exception as e:
-            self.logger.error(f"Stream processing error:{e}")
-            raise
+        query.awaitTermination()
+        
+        # except Exception as e:
+        #     self.logger.error(f"Stream processing error:{e}")
+        #     raise
 
     def stop(self):
         """Stop Spark session"""   
