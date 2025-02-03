@@ -18,7 +18,7 @@ class StockDataProducer:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-    def get_stock_data(self, symbol):
+    def get_stock_data(self, symbol: str) -> Dict:
         try:
             stock = yf.Ticker(symbol)
             data = stock.info
@@ -35,7 +35,7 @@ class StockDataProducer:
             self.logger.error(f"Error fetching data for {symbol}: {str(e)}")
             return None
 
-    def produce_messages(self, symbols, interval=60):
+    def produce_messages(self, symbols: List[str], interval: int = 60):
         while True:
             for symbol in symbols:
                 data = self.get_stock_data(symbol)
