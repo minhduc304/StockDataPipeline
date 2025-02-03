@@ -1,10 +1,9 @@
-import psycopg2
-from psycopg2.extras import execute_batch
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, TimestampType
 from typing import Optional, Dict, List
 from datetime import datetime
+from timescaleDB import TimeScaleDBConnector
 
 class SparkConsumer :
     def __init__(self, app_name: str = "StockMarketPipeline"):
@@ -91,7 +90,7 @@ class SparkConsumer :
 
             # Parse JSON data from Kafka messages
             parsed_df = df.select(
-                from_json(col("value").cast("string"), schema).alias("data")
+                from_json(col("value").cast("string"), self.schema).alias("data")
             ).select("data.*")
 
             # Convert timestamp to proper format
