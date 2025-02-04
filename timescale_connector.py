@@ -5,13 +5,14 @@ from typing import List, Dict
 
 
 class TimeScaleDBConnector:
-    def __init__(self, host: str, database: str, user: str, password: str):
+    def __init__(self, host: str, database: str, user: str, password: str, port: int):
         """Initialize TimescaleDB connection"""
         self.conn_params = {
             'host': host,
             'database': database,
             'user': user,
-            'password': password
+            'password': password,
+            'port': port
         }
         self.conn = None
         self.setup_database()
@@ -33,18 +34,20 @@ class TimeScaleDBConnector:
                         change_percent DOUBLE PRECISION
                     );
                 """)
+
+                self.conn.commit()
             
-            cur.execute("""
-                SELECT create_hypertable('stock_data', 'time', 
-                        if_not_exists => TRUE);
-            """)
+                cur.execute("""
+                    SELECT create_hypertable('stock_data', 'time', 
+                            if_not_exists => TRUE);
+                """)
 
-            cur.execute("""
-                SELECT INDEX IF NOT EXISTS idx_stock_symbol_time 
-                ON stock_data (symbol, time DESC);
-            """)
+                cur.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_stock_symbol_time 
+                    ON stock_data (symbol, time DESC);
+                """)
 
-            self.conn.commit()
+                self.conn.commit()
 
         except Exception as e:
             logging.error(f"Database setup error: {e}")

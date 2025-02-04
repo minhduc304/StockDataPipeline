@@ -20,11 +20,12 @@ class SparkConsumer :
         ])
 
         #TimescaleDB configuration
-        self.timesclae_config = {
+        self.timescale_config = {
             'host': 'localhost',
             'database': 'stockmarket',
             'user': 'postgres',
-            'password': 'password'
+            'password': 'password',
+            'port': 'port'
         }
 
     def write_to_timescaledb(self, batch_df, batch_id):
