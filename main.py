@@ -15,9 +15,11 @@ from config import (
     TIMESCALE_USER, 
     TIMESCALE_PASSWORD, 
     TIMESCALE_PORT,
+    SPARK_HOME,
     DEFAULT_UPDATE_INTERVAL, 
     LOG_LEVEL
 )
+
 from stock_producer import StockDataProducer
 from spark_consumer import SparkConsumer
 from timescale_connector import TimeScaleDBConnector
@@ -32,6 +34,9 @@ def setup_logging():
 def initialize_timescale_db():
     """Initialize TimescaleDB with the required schema"""
     try:
+        logging.info(f"TimescaleDB Port value: {TIMESCALE_PORT}")
+        logging.info(f"TimescaleDB Port type: {type(TIMESCALE_PORT)}")
+
         db_connector = TimeScaleDBConnector(
             host=TIMESCALE_HOST, 
             database=TIMESCALE_DB, 
@@ -63,7 +68,13 @@ def run_producer(symbols):
 def run_consumer():
     """Run Spark Streaming consumer process"""
     try:
-        consumer = SparkConsumer()
+        consumer = SparkConsumer(
+            host=TIMESCALE_HOST,
+            db=TIMESCALE_DB,
+            user=TIMESCALE_USER,
+            password=TIMESCALE_PASSWORD,
+            port=TIMESCALE_PORT
+        )
         consumer.process_stream(
             kafka_bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS, 
             topic=KAFKA_TOPIC

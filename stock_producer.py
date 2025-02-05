@@ -1,9 +1,11 @@
 from kafka import KafkaProducer
 import yfinance as yf
 import json
-import time
 import logging
 from typing import List, Dict
+import pytz
+from datetime import datetime
+import time
 
 class StockDataProducer:
     """
@@ -22,9 +24,12 @@ class StockDataProducer:
         try:
             stock = yf.Ticker(symbol)
             data = stock.info
+
+            current_timestamp = datetime.now(pytz.UTC).isoformat()
+
             return {
                 'symbol': symbol,
-                'timestamp': time.time(),
+                'timestamp': current_timestamp,
                 'price': data.get('regularMarketPrice', 0),
                 'volume': data.get('regularMarketVolume', 0),
                 'high': data.get('dayHigh', 0),

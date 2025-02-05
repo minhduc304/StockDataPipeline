@@ -5,7 +5,7 @@ from typing import List, Dict
 
 
 class TimeScaleDBConnector:
-    def __init__(self, host: str, database: str, user: str, password: str, port: int):
+    def __init__(self, host: str, database: str, user: str, password: str, port):
         """Initialize TimescaleDB connection"""
         self.conn_params = {
             'host': host,
@@ -62,7 +62,7 @@ class TimeScaleDBConnector:
                     INSERT INTO stock_data (
                         time, symbol, price, volume, high, low, change_percent)
                     VALUES ( 
-                        %(timestamp)s, %(symbol)s, %(price)s, %(volumne)s, 
+                        %(timestamp)s, %(symbol)s, %(price)s, %(volume)s, 
                         %(high)s, %(low)s, %(change_percent)s)
                 """, records)
                 self.conn.commit()
