@@ -89,7 +89,7 @@ def main():
     setup_logging()
     
     # List of stock symbols to track
-    stock_symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA']
+    stock_symbols = ['NVDA', 'GOOGL', 'MSFT', 'AMZN', 'TSLA']
     
     # try:
         # Initialize TimescaleDB

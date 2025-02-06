@@ -23,5 +23,3 @@ SPARK_DRIVER_MEMORY = os.getenv('SPARK_DRIVER_MEMORY', '4g')
 # Application Configuration
 DEFAULT_UPDATE_INTERVAL = int(os.getenv('UPDATE_INTERVAL', '60'))
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
-
-print(TIMESCALE_PASSWORD)

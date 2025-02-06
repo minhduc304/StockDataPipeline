@@ -23,18 +23,27 @@ class StockDataProducer:
     def get_stock_data(self, symbol: str) -> Dict:
         try:
             stock = yf.Ticker(symbol)
-            data = stock.info
 
+             # Add more comprehensive logging
+            self.logger.info(f"Fetching data for {symbol}")
+            # Print out the entire stock.info dictionary to see what's available
+            self.logger.debug(f"Full stock info: {stock.info}")
+
+             # Log specific field values
+            self.logger.info(f"Regular Market Price: {data.get('regularMarketPrice')}")
+            self.logger.info(f"Regular Market Change Percent: {data.get('regularMarketChangePercent')}")
+
+            
             current_timestamp = datetime.now(pytz.UTC).isoformat()
 
             return {
                 'symbol': symbol,
                 'timestamp': current_timestamp,
-                'price': data.get('regularMarketPrice', 0),
-                'volume': data.get('regularMarketVolume', 0),
-                'high': data.get('dayHigh', 0),
-                'low': data.get('dayLow', 0),
-                'change_percent': data.get('regularMarketChangePercent', 0)
+                'price': stock.fast_info.last_price,
+                'volume': stock.fast_info.last_volume,
+                'high': stock.info.get('dayHigh'),
+                'low': stock.info.get('dayLow'),
+                '52week_change': stock.get_info().get('52WeekChange')
             }
         except Exception as e:
             self.logger.error(f"Error fetching data for {symbol}: {str(e)}")
