@@ -12,7 +12,7 @@ TIMESCALE_HOST = os.getenv('TIMESCALE_HOST', 'localhost')
 TIMESCALE_DB = os.getenv('TIMESCALE_DB', 'stockmarket')
 TIMESCALE_USER = os.getenv('TIMESCALE_USER', 'user')
 TIMESCALE_PASSWORD = os.getenv('TIMESCALE_PASSWORD', 'password')
-TIMESCALE_PORT = os.getenv('TIMESCALE_PORT', '33292')
+TIMESCALE_PORT = os.getenv('TIMESCALE_PORT', 'port')
 
 #Spark Configuration
 SPARK_HOME = os.getenv('SPARK_HOME', 'path')

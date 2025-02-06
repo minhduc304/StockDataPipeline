@@ -26,14 +26,7 @@ class StockDataProducer:
 
              # Add more comprehensive logging
             self.logger.info(f"Fetching data for {symbol}")
-            # Print out the entire stock.info dictionary to see what's available
-            self.logger.debug(f"Full stock info: {stock.info}")
-
-             # Log specific field values
-            self.logger.info(f"Regular Market Price: {data.get('regularMarketPrice')}")
-            self.logger.info(f"Regular Market Change Percent: {data.get('regularMarketChangePercent')}")
-
-            
+                        
             current_timestamp = datetime.now(pytz.UTC).isoformat()
 
             return {
