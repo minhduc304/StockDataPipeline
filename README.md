@@ -200,6 +200,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - your.email@example.com
+Your Name - mihducv42@gmail.com
 
 Project Link: [https://github.com/yourusername/stock-streaming-pipeline](https://github.com/yourusername/stock-streaming-pipeline)
