@@ -24,7 +24,7 @@ class StockDataProducer:
         try:
             stock = yf.Ticker(symbol)
 
-             # Add more comprehensive logging
+             # Some more comprehensive logging
             self.logger.info(f"Fetching data for {symbol}")
                         
             current_timestamp = datetime.now(pytz.UTC).isoformat()

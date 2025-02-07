@@ -7,6 +7,8 @@ from typing import List, Dict
 class TimeScaleDBConnector:
     def __init__(self, host: str, database: str, user: str, password: str, port):
         """Initialize TimescaleDB connection"""
+        logging.basicConfig(level=logging.INFO)
+        self.logger = logging.getLogger(__name__)  
         self.conn_params = {
             'host': host,
             'database': database,
@@ -31,7 +33,7 @@ class TimeScaleDBConnector:
                         volume DOUBLE PRECISION,
                         high DOUBLE PRECISION,
                         low DOUBLE PRECISION,
-                        change_percent DOUBLE PRECISION
+                        52_week_change DOUBLE PRECISION
                     );
                 """)
 
@@ -50,7 +52,7 @@ class TimeScaleDBConnector:
                 self.conn.commit()
 
         except Exception as e:
-            logging.error(f"Database setup error: {e}")
+            self.logger.error(f"Database setup error: {e}")
             raise
     
     def insert_batch(self, records: List[Dict]):
@@ -60,14 +62,14 @@ class TimeScaleDBConnector:
             with self.conn.cursor() as cur:
                 execute_batch(cur, """
                     INSERT INTO stock_data (
-                        time, symbol, price, volume, high, low, change_percent)
+                        time, symbol, price, volume, high, low, 52_week_change)
                     VALUES ( 
                         %(timestamp)s, %(symbol)s, %(price)s, %(volume)s, 
-                        %(high)s, %(low)s, %(change_percent)s)
+                        %(high)s, %(low)s, %(52_week_change)s)
                 """, records)
                 self.conn.commit()
         except Exception as e:
-            logging.error(f"Batch insert error: {e}")
+            self.logger.error(f"Batch insert error: {e}")
             self.conn.rollback()
             raise
 

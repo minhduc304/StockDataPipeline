@@ -2,12 +2,13 @@ import logging
 from multiprocessing import Process
 import sys
 import os
+import src.config as config
 
 # Add the current directory to Python path to import local modules
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import local modules
-from config import (
+from src.config import (
     KAFKA_BOOTSTRAP_SERVERS, 
     KAFKA_TOPIC, 
     TIMESCALE_HOST, 
@@ -91,25 +92,25 @@ def main():
     # List of stock symbols to track
     stock_symbols = ['NVDA', 'GOOGL', 'MSFT', 'AMZN', 'TSLA']
     
-    # try:
+    try:
         # Initialize TimescaleDB
-    initialize_timescale_db()
+        initialize_timescale_db()
+        
+        # Create multiprocessing processes
+        producer_process = Process(target=run_producer, args=(stock_symbols,))
+        consumer_process = Process(target=run_consumer)
+        
+        # Start processes
+        producer_process.start()
+        consumer_process.start()
+        
+        # Wait for processes to complete
+        producer_process.join()
+        consumer_process.join()
     
-    # Create multiprocessing processes
-    producer_process = Process(target=run_producer, args=(stock_symbols,))
-    consumer_process = Process(target=run_consumer)
-    
-    # Start processes
-    producer_process.start()
-    consumer_process.start()
-    
-    # Wait for processes to complete
-    producer_process.join()
-    consumer_process.join()
-    
-    # except Exception as e:
-    #     logging.error(f"Pipeline initialization failed: {e}")
-    #     sys.exit(1)
+    except Exception as e:
+        logging.error(f"Pipeline initialization failed: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
