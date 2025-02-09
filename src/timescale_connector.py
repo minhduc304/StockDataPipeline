@@ -33,7 +33,7 @@ class TimeScaleDBConnector:
                         volume DOUBLE PRECISION,
                         high DOUBLE PRECISION,
                         low DOUBLE PRECISION,
-                        52_week_change DOUBLE PRECISION
+                        _52WeekChange DOUBLE PRECISION
                     );
                 """)
 
@@ -62,10 +62,10 @@ class TimeScaleDBConnector:
             with self.conn.cursor() as cur:
                 execute_batch(cur, """
                     INSERT INTO stock_data (
-                        time, symbol, price, volume, high, low, 52_week_change)
+                        time, symbol, price, volume, high, low, _52WeekChange)
                     VALUES ( 
                         %(timestamp)s, %(symbol)s, %(price)s, %(volume)s, 
-                        %(high)s, %(low)s, %(52_week_change)s)
+                        %(high)s, %(low)s, %(_52WeekChange)s)
                 """, records)
                 self.conn.commit()
         except Exception as e:
