@@ -95,12 +95,12 @@ Create a `.env` file in the project root with the following variables:
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092
 KAFKA_TOPIC=stock_data
 
-# TimescaleDB Configuration
+# TimescaleDB Configuration 
 TIMESCALE_HOST=localhost
 TIMESCALE_DB=stockmarket
 TIMESCALE_USER=user
 TIMESCALE_PASSWORD=password
-TIMESCALE_PORT=33292
+TIMESCALE_PORT=port
 
 # Spark Configuration
 SPARK_HOME=/path/to/spark
@@ -153,17 +153,54 @@ Precedence is in the order listed above.
 
 ## Usage
 
-### Starting the Producer
+### Running the Pipeline
+
+To start the entire stock market data streaming pipeline, simply run the main script:
 
 ```bash
-python stock_producer.py
+python main.py
 ```
 
-### Starting the Spark Consumer
+This will:
+- Initialize TimescaleDB 
+- Start the Kafka Producer
+- Start the Spark Consumer
+- Track stock symbols: NVDA, GOOGL, MSFT, AMZN, TSLA
+- Use the default update interval (60 seconds)
 
-```bash
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.0 spark_consumer.py
+### Customizing the Pipeline
+
+To modify the tracked stocks or update interval, edit the `main.py` file:
+
+```python
+# Modify the list of stock symbols
+stock_symbols = ['NVDA', 'GOOGL', 'MSFT', 'AMZN', 'TSLA']
+
+# Change update interval by modifying the config.py or .env file
+UPDATE_INTERVAL=60  # Seconds between data fetches
 ```
+
+### Logging
+
+The application uses Python's logging module. Log levels can be configured in the `.env` file:
+
+```ini
+LOG_LEVEL=INFO  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+```
+
+### Multiprocessing
+
+The pipeline uses multiprocessing to:
+- Run the Kafka Producer in one process
+- Run the Spark Consumer in another process
+- Ensure independent operation of data production and consumption
+
+## Troubleshooting
+
+- Ensure all dependencies are installed
+- Verify Kafka and TimescaleDB are running
+- Check logs for any connection or processing errors
+
 
 ## Environment Variables
 
