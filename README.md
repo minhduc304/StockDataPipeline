@@ -239,4 +239,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Duc Vu - mihducv42@gmail.com
 
-Project Link: [https://github.com/yourusername/stock-streaming-pipeline](https://github.com/yourusername/stock-streaming-pipeline)
+Project Link: [https://github.com/minhduc304/stock-streaming-pipeline](https://github.com/yourusername/stock-streaming-pipeline)
