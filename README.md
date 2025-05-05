@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a robust, end-to-end data streaming solution for real-time stock market data processing. It leverages modern big data technologies to capture, stream, and persist stock market information with low latency and high reliability.
+This project is a end-to-end data streaming platform for real-time stock market data processing. It captures, streams, and persists stock market information with low latency and high reliability.
 
 The pipeline consists of three main components:
 - **Stock Data Producer**: Fetches real-time stock data using Yahoo Finance
